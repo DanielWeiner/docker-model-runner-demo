@@ -1,0 +1,54 @@
+name: qwen-sandbox
+services:
+  qwen:
+    networks:
+      - qwen-bridge
+    build: ./qwen
+    models: 
+      main-llm:
+        model_var: MAIN_LLM_NAME
+    working_dir: /qwen
+    depends_on:
+      - mcp-web-tools
+    volumes:
+      - ./sandbox:/qwen
+  mcp-web-tools:
+    image: node:26-alpine
+    networks:
+      qwen-bridge:
+        aliases:
+          - mcp-web-tools
+    working_dir: /app
+    volumes:
+      - ./mcp-web-tools:/app
+    environment:
+      - PORT=8080
+    env_file:
+      - ~/.credentials/mcp-utils.env
+    command: >
+      node index.mjs
+models:
+  main-llm:
+    model: huggingface.co/davidau/qwen3.5-9b-the-defiant-fable-uncensored-heretic-neo-imatrix-max-mtp-gguf:Q6_K
+    context_size: 64000
+    runtime_flags:
+      - "--temp"
+      - "0.6"
+      - "--min-p"
+      - "0"
+      - "--top-p"
+      - "0.95"
+      - "--top-k"
+      - "20"
+      - "--repeat-penalty"
+      - "1.00"
+      - "--presence-penalty"
+      - "1.5"
+      - "--kv-unified"
+      - "--cache-type-k"
+      - "q8_0"
+      - "--cache-type-v"
+      - "q8_0"
+networks:
+  qwen-bridge:
+    driver: bridge

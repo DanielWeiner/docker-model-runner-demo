@@ -1,0 +1,20 @@
+{
+  "env": {},
+  "modelProviders": {},
+  "model":{
+    "generationConfig": {
+      "contextWindowSize": 131072
+    }
+  },
+  "security": {},
+  "$version": 4,
+  "ui": {
+    "autoModeAcknowledged": true
+  },
+  "mcpServers": {
+    "web-tools": {
+      "httpUrl": "http://mcp-web-tools:8080/mcp",
+      "timeout": 5000
+    }
+  }
+}
